@@ -24,6 +24,7 @@ dependencies:
   - matplotlib
   - tensorboard
   - psutil
+  - libgcc
 
 
 
