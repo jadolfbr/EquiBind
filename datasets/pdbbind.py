@@ -69,8 +69,9 @@ class PDBBind(Dataset):
                  transform=None, **kwargs):
         # subset name is either 'pdbbind_filtered' or 'casf_test'
         self.chain_radius = chain_radius
-        self.pdbbind_dir = 'data/PDBBind'
-        self.bsp_dir = 'data/deepBSP'
+        self.project_root = os.path.split(os.path.abspath(__file__))[0] + "/.."
+        self.pdbbind_dir = f'{self.project_root}/data/PDBBind'
+        self.bsp_dir = f'{self.project_root}/data/deepBSP'
         self.only_polar_hydrogens = only_polar_hydrogens
         self.complex_names_path = complex_names_path
         self.pocket_cutoff = pocket_cutoff
@@ -113,7 +114,7 @@ class PDBBind(Dataset):
         else:
             self.rec_subgraph_path = f'rec_subgraphs_cutoff{self.subgraph_cutoff}_radius{self.subgraph_radius}_maxNeigh{self.subgraph_max_neigbor}_{self.lig_predictions_name}'
 
-        self.processed_dir = f'data/processed/size{self.dataset_size}_INDEX{os.path.splitext(os.path.basename(self.complex_names_path))[0]}_Hpolar{int(self.only_polar_hydrogens)}_H{int(not self.remove_h)}_BSPprot{int(self.bsp_proteins)}_BSPlig{int(self.bsp_ligands)}_surface{int(self.use_rec_atoms)}_pocketRad{self.pocket_cutoff}_ligRad{self.lig_graph_radius}_recRad{self.rec_graph_radius}_recMax{self.c_alpha_max_neighbors}_ligMax{self.lig_max_neighbors}_chain{self.chain_radius}_POCKET{self.pocket_mode}'
+        self.processed_dir = f'{self.project_root}/data/processed/size{self.dataset_size}_INDEX{os.path.splitext(os.path.basename(self.complex_names_path))[0]}_Hpolar{int(self.only_polar_hydrogens)}_H{int(not self.remove_h)}_BSPprot{int(self.bsp_proteins)}_BSPlig{int(self.bsp_ligands)}_surface{int(self.use_rec_atoms)}_pocketRad{self.pocket_cutoff}_ligRad{self.lig_graph_radius}_recRad{self.rec_graph_radius}_recMax{self.c_alpha_max_neighbors}_ligMax{self.lig_max_neighbors}_chain{self.chain_radius}_POCKET{self.pocket_mode}'
         print(f'using processed directory: {self.processed_dir}')
         if self.use_rdkit_coords:
             self.lig_graph_path = 'lig_graphs_rdkit_coords.pt'

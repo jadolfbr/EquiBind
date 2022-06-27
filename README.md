@@ -108,6 +108,13 @@ failed.txt - contains the index (in the file ligands.sdf) and name of every mole
 success.txt - contains the index (in the file ligands.sdf) and name of every molecule for which inference succeeded.\
 output.sdf - contains the conformers produced by EquiBind in .sdf format.
 
+# Refining the output model
+
+EquiBind may create clashes in the output models.  The best way to resolve these is to use Equibind+S(MINA) as seen in the paper. 
+SMINA can be installed from [sourceforge](https://sourceforge.net/p/smina/code/ci/master/tree/)
+Static builds are available for linux an macos. 
+
+The full script used in the paper can be found in issue [#14](https://github.com/HannesStark/EquiBind/issues/15).
 
 
 # Reproducing paper numbers

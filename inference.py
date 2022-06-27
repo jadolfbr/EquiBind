@@ -43,6 +43,7 @@ import faulthandler
 
 faulthandler.enable()
 
+project_root = os.path.split(os.path.abspath(__file__))[0]
 
 def parse_arguments(arglist = None):
     p = argparse.ArgumentParser()
@@ -228,9 +229,9 @@ def inference(args, tune_args=None):
             for i, (prediction, target, lig_keypts, rec_keypts, name) in tqdm(enumerate(
                     zip(results['predictions'], results['targets'], results['lig_keypts'], results['rec_keypts'],
                         results['names']))):
-                lig = read_molecule(os.path.join('data/PDBBind/', name, f'{name}_ligand.sdf'), sanitize=True)
+                lig = read_molecule(os.path.join(f'{project_root}/data/PDBBind/', name, f'{name}_ligand.sdf'), sanitize=True)
                 if lig == None:  # read mol2 file if sdf file cannot be sanitized
-                    lig = read_molecule(os.path.join('data/PDBBind/', name, f'{name}_ligand.mol2'), sanitize=True)
+                    lig = read_molecule(os.path.join(f'{project_root}/data/PDBBind/', name, f'{name}_ligand.mol2'), sanitize=True)
 
                 lig_rdkit = deepcopy(lig)
                 rdkit_coords = rdkit_graphs[i].ndata['new_x'].numpy()
@@ -327,7 +328,7 @@ def inference_from_files(args):
     dp = args.dataset_params
     use_rdkit_coords = args.use_rdkit_coords if args.use_rdkit_coords != None else args.dataset_params[
         'use_rdkit_coords']
-    names = os.listdir(args.inference_path) if args.inference_path != None else tqdm(read_strings_from_txt('data/timesplit_test'))
+    names = os.listdir(args.inference_path) if args.inference_path != None else tqdm(read_strings_from_txt(f'{project_root}/data/timesplit_test'))
     for idx, name in enumerate(names):
         print(f'\nProcessing {name}: complex {idx + 1} of {len(names)}')
         file_names = os.listdir(os.path.join(args.inference_path, name))
@@ -464,8 +465,8 @@ if __name__ == '__main__':
         config_dict = {}
 
     for run_dir in args.run_dirs:
-        args.checkpoint = f'runs/{run_dir}/best_checkpoint.pt'
-        config_dict['checkpoint'] = f'runs/{run_dir}/best_checkpoint.pt'
+        args.checkpoint = f'{project_root}/runs/{run_dir}/best_checkpoint.pt'
+        config_dict['checkpoint'] = f'{project_root}/runs/{run_dir}/best_checkpoint.pt'
         # overwrite args with args from checkpoint except for the args that were contained in the config file
         arg_dict = args.__dict__
         with open(os.path.join(os.path.dirname(args.checkpoint), 'train_arguments.yaml'), 'r') as arg_file:
